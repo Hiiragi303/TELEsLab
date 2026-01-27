@@ -1,0 +1,101 @@
+[
+  {
+    "id": "builtin_text-RCNX9K",
+    "formData": {
+      "text$ja": "こんにちは。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T04:17:58.524Z",
+    "modifiedOn": "2026-01-14T04:17:58.524Z"
+  },
+  {
+    "id": "builtin_text-br1EkV",
+    "formData": {
+      "text$ja": "どんな研究室をお探しですか？",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T04:18:39.649Z",
+    "modifiedOn": "2026-01-14T04:18:39.649Z"
+  },
+  {
+    "id": "builtin_text-Rw0f0U",
+    "formData": {
+      "text$ja": "他の研究室についても検索しますか？",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T04:45:06.957Z",
+    "modifiedOn": "2026-01-14T04:45:06.957Z"
+  },
+  {
+    "id": "builtin_text-Q53TZU",
+    "formData": {
+      "text$ja": "どの研究室に興味がありますか？",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T04:49:24.762Z",
+    "modifiedOn": "2026-01-14T04:49:24.762Z"
+  },
+  {
+    "id": "builtin_text-sqR7JS",
+    "formData": {
+      "text$ja": "では、{{event.payload.tag}}について研究している研究室一覧を表示します。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T05:18:51.383Z",
+    "modifiedOn": "2026-01-19T09:26:33.083Z"
+  },
+  {
+    "id": "builtin_text-iGcn6S",
+    "formData": {
+      "text$ja": "わかりました、では{{event.payload.sortKey}}に関してランキング一覧を表示します。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T10:48:11.966Z",
+    "modifiedOn": "2026-01-19T09:26:22.768Z"
+  },
+  {
+    "id": "builtin_text-nlAI-3",
+    "formData": {
+      "text$ja": "申し訳ございません、判別できませんでした。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-14T13:04:33.758Z",
+    "modifiedOn": "2026-01-14T13:04:33.758Z"
+  },
+  {
+    "id": "builtin_text-LZZ03l",
+    "formData": {
+      "text$ja": "わかりました、では{{event.payload.labName}}について表示します。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-18T22:23:27.036Z",
+    "modifiedOn": "2026-01-18T22:23:27.036Z"
+  },
+  {
+    "id": "builtin_text-Avo4eE",
+    "formData": {
+      "text$ja": "これで終了します。",
+      "markdown$ja": false,
+      "typing$ja": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2026-01-19T10:05:08.527Z",
+    "modifiedOn": "2026-01-19T10:05:08.527Z"
+  }
+]

@@ -1,0 +1,661 @@
+[
+    {
+        "id": "1eba73b568e45a46",
+        "type": "tab",
+        "label": "フロー 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "040901f4f15d3a96",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/latest",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 600,
+        "wires": [
+            [
+                "7007eb908cec4062"
+            ]
+        ]
+    },
+    {
+        "id": "7007eb908cec4062",
+        "type": "http request",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://webdis:7379/hgetall/latest",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 330,
+        "y": 600,
+        "wires": [
+            [
+                "93b09bbadf765bee"
+            ]
+        ]
+    },
+    {
+        "id": "93b09bbadf765bee",
+        "type": "json",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 600,
+        "wires": [
+            [
+                "1d179f0df98d1248"
+            ]
+        ]
+    },
+    {
+        "id": "1d179f0df98d1248",
+        "type": "function",
+        "z": "1eba73b568e45a46",
+        "name": "function 1",
+        "func": "const h = msg.payload?.hgetall || {};\n\nmsg.payload = { data: h.data ?? null };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 600,
+        "wires": [
+            [
+                "13b01db15b519e8a"
+            ]
+        ]
+    },
+    {
+        "id": "13b01db15b519e8a",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "4b7d4904ecc428a9",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/teleslab",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 40,
+        "wires": [
+            [
+                "8ef35d24518b4b6a"
+            ]
+        ]
+    },
+    {
+        "id": "3026d0966a356efb",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "index.html",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html lang=\"ja\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>研究室分析＆検索ポータル</title>\n    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.css\">\n    <link rel=\"stylesheet\" href=\"/styles/style.css\">\n</head>\n\n<body>\n    <!-- トップ -->\n    <div class=\"jumbotron text-center bg-white py-4 mb-3\">\n        <h1 class=\"display-5\">研究室統合ダッシュボード</h1>\n        <p class=\"lead\">音声検索またはボタン操作で、分析データと一覧を同時に更新します</p>\n        <div class=\"btn-group\">\n            <a class=\"btn btn-primary\" href=\"#\" id=\"stt_btn\">音声認識開始</a>\n            <button class=\"btn btn-outline-secondary\" id=\"renewButton\">全件更新 (合計順)</button>\n        </div>\n        <div style=\"margin-top:8px;\">\n            <div id=\"stt_status\" style=\"font-size:12px; opacity:.85;\">IDLE</div>\n            <div style=\"height:6px; background:#333; border-radius:4px; overflow:hidden;\">\n                <div id=\"vu\" style=\"height:6px; width:0%; background:#4caf50;\"></div>\n            </div>\n        </div>\n    </div>\n    \n    <!-- メインコンテナ -->\n    <div class=\"container-fluid main-container\">\n        <!-- 研究室一覧ビュー -->\n        <section id=\"view-list\">\n            <h3 class=\"section-title d-flex justify-content-between align-items-center\">\n                研究室一覧\n                <div class=\"btn-group\" id=\"filterButtons\"></div>\n            </h3>\n            <div id=\"lab-list\" class=\"list-group list-group-flush\"></div>\n        </section>\n\n        <!-- 詳細一覧ビュー -->\n        <section id=\"view-detail\" style=\"display:none;\">\n            <h3 class=\"section-title d-flex justify-content-between align-items-center\">\n                詳細分析（パラメータ・口コミ）\n                <div class=\"btn-group\" id=\"backToList\"></div>\n            </h3>\n            <div id=\"graphContainer\"></div>\n            <h4 class=\"mt-4 mb-3 text-muted\" style=\"font-size:1rem;\">口コミ詳細</h4>\n            <div id=\"commentContainer\"></div>\n        </section>\n    </div>\n\n    <!-- Bootstrap -->\n    <script src=\"https://code.jquery.com/jquery-3.5.1.min.js\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js\"></script>\n    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js\"></script>\n\n    <!-- BotPress -->\n    <script src=\"http://localhost:3000/assets/modules/channel-web/inject.js\"></script>\n    <script src=\"/js/processBotpress.js\"></script>\n\n    <!-- Rendering -->\n    <script src=\"/js/renderGraphs.js\"></script>\n    <script src=\"/js/renderComments.js\"></script>\n    <script src=\"/js/renderLabLists.js\"></script>\n    <script src=\"/js/updateView.js\"></script>\n    <script src=\"/js/latestWatcher.js\"></script>\n\n    <!-- TTS/STT -->\n    <script src=\"js/tts.js\"></script>\n    <script src=\"js/stt.js\"></script>\n\n    <!-- Button -->\n    <script src=\"js/handleButton.js\"></script>\n    \n</body>\n\n</html>",
+        "output": "str",
+        "x": 530,
+        "y": 40,
+        "wires": [
+            [
+                "3e72d6a472426e16"
+            ]
+        ]
+    },
+    {
+        "id": "3e72d6a472426e16",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/html"
+        },
+        "x": 690,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "9eded686292d544e",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/styles/style.css",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "5679f0beec9d45e9"
+            ]
+        ]
+    },
+    {
+        "id": "444e39774aff909c",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/css"
+        },
+        "x": 550,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "5679f0beec9d45e9",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "css",
+        "syntax": "mustache",
+        "template": "body {\n    background-color: #f5f5f5;\n    font-family: \"Hiragino Kaku Gothic ProN\", \"Meiryo\", sans-serif;\n}\n\n/* --- 共通レイアウト調整 --- */\n.main-container {\n    margin-top: 20px;\n    margin-bottom: 50px;\n}\n\n.section-title {\n    font-size: 1.1rem;\n    font-weight: bold;\n    border-bottom: 2px solid #ddd;\n    padding-bottom: 10px;\n    margin-bottom: 20px;\n    color: #555;\n}\n\n/* --- 左側：グラフ・口コミ用スタイル --- */\n.graph-wrapper {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 15px;\n    justify-content: flex-start;\n    margin-bottom: 30px;\n}\n\n.graph-card {\n    background-color: #fff;\n    padding: 15px;\n    border-radius: 8px;\n    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);\n    text-align: center;\n    width: 260px;\n}\n\n.zemi-title {\n    font-size: 1.1rem;\n    font-weight: bold;\n    margin-bottom: 5px;\n    color: #333;\n}\n\n.zemi-tag {\n    display: inline-block;\n    background-color: #e2e6ea;\n    color: #555;\n    padding: 2px 8px;\n    border-radius: 12px;\n    font-size: 0.75rem;\n    margin-bottom: 10px;\n}\n\n.graph-label {\n    font-size: 10px;\n    fill: #333;\n    text-anchor: middle;\n}\n\n.review-group {\n    background-color: #fff;\n    padding: 15px;\n    margin-bottom: 15px;\n    border-radius: 8px;\n    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);\n}\n\n.review-item {\n    background-color: #f9f9f9;\n    padding: 8px 12px;\n    margin-bottom: 5px;\n    border-radius: 4px;\n    border-left: 4px solid #3498db;\n    font-size: 13px;\n}\n\n/* --- 右側：リスト用スタイル --- */\n.lab-list-container {\n    max-height: 80vh;\n    overflow-y: auto;\n    padding-right: 5px;\n}\n\n/* リストが長い場合にスクロール */\n.lab-list-item {\n    transition: background-color 0.2s;\n    cursor: default;\n}\n\n.lab-list-item:hover {\n    background-color: #f1f1f1;\n}\n\n.badge-score {\n    font-size: 0.9rem;\n}\n\n/* --- ローディング --- */\n.loading-spinner {\n    display: block;\n    margin: 30px auto;\n}\n\n/* Botpressのチャットウィンドウを最前面に表示する */\n.bp-widget-widget {\n    z-index: 2147 !important;\n    /* 考えうる最大値を指定 */\n}",
+        "output": "str",
+        "x": 400,
+        "y": 80,
+        "wires": [
+            [
+                "444e39774aff909c"
+            ]
+        ]
+    },
+    {
+        "id": "f027b2be0761e5bb",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/latestWatcher.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 560,
+        "wires": [
+            [
+                "8035288c11339ee6"
+            ]
+        ]
+    },
+    {
+        "id": "d4cc2774a113b93c",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "8035288c11339ee6",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// 検索条件の更新\nlet prevTag = '';\nlet prevSortKey = '';\nlet prevLabName = '';\n\nasync function refresh() {\n    const res = await fetch('../latest');\n    const parsed = await res.json();\n    const data = typeof parsed.data === \"string\"\n        ? JSON.parse(parsed.data)\n        : parsed.data;\n    if (!data) return;\n\n    const tag = data.tag ?? '';\n    const sortKey = data.sortKey ?? '';\n    const labName = data.labName ?? '';\n    if (tag && tag !== prevTag) {\n        prevTag = tag;\n        prevSortKey = '';\n        prevLabName = '';\n\n        updateView(tag, sortKey, labName);\n    } else if (sortKey && sortKey !== prevSortKey) {\n        prevTag = '';\n        prevSortKey = sortKey;\n        prevLabName = '';\n\n        updateView(tag, sortKey, labName);\n    } else if (labName && labName !== prevLabName) {\n        prevTag = '';\n        prevSortKey = '';\n        prevLabName = labName;\n\n        updateView(tag, sortKey, labName);\n    }\n}\nsetInterval(refresh, 1000);",
+        "output": "str",
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "d4cc2774a113b93c"
+            ]
+        ]
+    },
+    {
+        "id": "201956091bbd6515",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/updateView.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 500,
+        "wires": [
+            [
+                "a9c30aafbf2745f4"
+            ]
+        ]
+    },
+    {
+        "id": "a9c30aafbf2745f4",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "const GAS_API_URL = \"https://script.google.com/macros/s/AKfycbwJwBUDuIgYN4WNUlmmi5C53OSkBwob_iv9LFwVQ1tWV3Y2XUBO-OFIjuYdXFqWtVi8WA/exec\";\n\nasync function updateView(tag = \"\", sortKey = \"合計\", labName = \"\") {\n    // 要素を取得する\n    const graphArea = document.getElementById(\"graphContainer\");\n    const commentArea = document.getElementById(\"commentContainer\");\n    const listArea = document.getElementById(\"lab-list\");\n\n    // 描画するビューの種類を判定する\n    const viewType = (tag != \"\" || sortKey != \"\") ? \"list\" : (labName != \"\") ? \"detail\" : \"none\";\n    if (viewType === \"detail\") {\n        // 使わないページはローディング\n        listArea.innerHTML = '<p class=\"text-center text-muted mt-3\">読み込み中...</p>';\n    } else if (viewType === \"list\") {\n        // 使わないページはローディング\n        graphArea.innerHTML = '<p class=\"text-center text-muted mt-3\">読み込み中...</p>';\n        commentArea.innerHTML = '<p class=\"text-center text-muted mt-3\">読み込み中...</p>';\n    }\n\n    // 表示、非表示の切り替えを行う\n    document.getElementById(\"view-list\").style.display = (viewType === \"list\") ? \"\" : \"none\";\n    document.getElementById(\"view-detail\").style.display = (viewType === \"detail\") ? \"\" : \"none\";\n\n    // データ取得後更新\n    try {\n        // GASにPOST\n        const response = await fetch(GAS_API_URL, {\n            method: \"POST\",\n            body: JSON.stringify({ \"labName\": labName, \"tag\": tag, \"sortKey\": sortKey })\n        });\n\n        if (!response.ok) throw new Error(\"Network response was not ok\");\n        const data = await response.json();\n\n        // データが空の場合\n        if (data.length === 0 || 'error' in data) {\n            const msg = '<p class=\"text-muted text-center w-100\">該当する研究室はありませんでした。</p>';\n            if (viewType === \"detail\") {\n                graphArea.innerHTML = msg;\n                commentArea.innerHTML = \"\";\n            } else if (viewType === \"list\") {\n                listArea.innerHTML = msg;\n            }\n            return;\n        }\n\n        // それぞれビューを更新\n        if (viewType === \"detail\") {\n            renderGraphs(data);\n            renderComments(data);\n        } else if (viewType === \"list\") {\n            renderLabLists(data);\n        }\n    } catch (error) {\n        console.error(\"Fetch error:\", error);\n        const errMsg = '<p class=\"text-danger text-center w-100\">データ取得失敗</p>';\n        if (viewType === \"detail\") {\n            graphArea.innerHTML = errMsg;\n            commentArea.innerHTML = \"\";\n        } else if (viewType === \"list\") {\n            listArea.innerHTML = errMsg;\n        }\n    }\n}",
+        "output": "str",
+        "x": 440,
+        "y": 500,
+        "wires": [
+            [
+                "9dfc1dcb8c08a055"
+            ]
+        ]
+    },
+    {
+        "id": "9dfc1dcb8c08a055",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "fe33ce0aa3077795",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/renderGraphs.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 360,
+        "wires": [
+            [
+                "1c140caab4c653f9"
+            ]
+        ]
+    },
+    {
+        "id": "1c140caab4c653f9",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// グラフ描画\nfunction renderGraphs(data) {\n    // グラフ描画用設定\n    const graphKeys = [\"作業量\", \"就活支援度\", \"研究支援度\", \"雰囲気\", \"成長性\"];\n    const size = 220, center = size / 2, radius = 70, maxValue = 5;\n\n    // 座標を求める関数\n    function getPoint(angle, value) {\n        const r = (value / maxValue) * radius;\n        return { x: center + r * Math.cos(angle), y: center + r * Math.sin(angle) };\n    }\n\n    // グラフ描画コンテナ\n    const container = document.getElementById(\"graphContainer\");\n    container.innerHTML = '';\n\n    // データ注入\n    data.forEach(item => {\n        const cardDiv = document.createElement(\"div\");\n        cardDiv.className = \"graph-card\";\n\n        let svg = `<svg width=\"${size}\" height=\"${size}\" style=\"margin: 0 auto; display: block;\">`;\n\n        // グリッド\n        for (let level = 1; level <= 5; level++) {\n            const points = graphKeys.map((_, i) => {\n                const angle = (Math.PI * 2 / 5) * i - Math.PI / 2;\n                const p = getPoint(angle, level);\n                return `${p.x},${p.y}`;\n            }).join(\" \");\n            svg += `<polygon points=\"${points}\" fill=\"none\" stroke=\"#eee\" stroke-width=\"1\" />`;\n        }\n\n        // 軸\n        graphKeys.forEach((key, i) => {\n            const angle = (Math.PI * 2 / 5) * i - Math.PI / 2;\n            const end = getPoint(angle, 5);\n            const labelPos = getPoint(angle, 6.2);\n            svg += `<line x1=\"${center}\" y1=\"${center}\" x2=\"${end.x}\" y2=\"${end.y}\" stroke=\"#ddd\" />`;\n            svg += `<text x=\"${labelPos.x}\" y=\"${labelPos.y}\" class=\"graph-label\" dy=\"0.3em\">${key}</text>`;\n        });\n\n        // データ\n        const dataPoints = graphKeys.map((key, i) => {\n            const angle = (Math.PI * 2 / 5) * i - Math.PI / 2;\n            const val = item.metrics[key] || 0;\n            const p = getPoint(angle, val);\n            return `${p.x},${p.y}`;\n        }).join(\" \");\n        svg += `<polygon points=\"${dataPoints}\" fill=\"rgba(52,152,219,0.3)\" stroke=\"#3498db\" stroke-width=\"2\" />`;\n        svg += `</svg>`;\n\n        cardDiv.innerHTML = `<div class=\"zemi-title\">${item.zemiName}</div><div class=\"zemi-tag\">#${item.tag}</div>` + svg;\n        container.appendChild(cardDiv);\n    });\n}",
+        "output": "str",
+        "x": 440,
+        "y": 360,
+        "wires": [
+            [
+                "de5dad77d93a0814"
+            ]
+        ]
+    },
+    {
+        "id": "de5dad77d93a0814",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "99adefc237251ad4",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/renderComments.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 400,
+        "wires": [
+            [
+                "06b2212fbb784ccb"
+            ]
+        ]
+    },
+    {
+        "id": "06b2212fbb784ccb",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// 口コミ詳細描画\nfunction renderComments(data) {\n    // 口コミコンテナ取得\n    const container = document.getElementById(\"commentContainer\");\n    container.innerHTML = '';\n\n    // データ注入\n    data.forEach(item => {\n        const groupDiv = document.createElement(\"div\");\n        groupDiv.className = \"review-group\";\n\n        const reviewsHtml = (item.reviews && item.reviews.length > 0)\n            ? item.reviews.map(r => `<div class=\"review-item\">${r}</div>`).join('')\n            : '<div class=\"text-muted small\">口コミなし</div>';\n\n        groupDiv.innerHTML = `\n                    <div class=\"d-flex justify-content-between border-bottom pb-2 mb-2\">\n                        <strong>${item.zemiName}</strong>\n                        <span class=\"badge badge-info\">合計: ${item.metrics.合計}</span>\n                    </div>\n                    <div>${reviewsHtml}</div>\n                `;\n        container.appendChild(groupDiv);\n    });\n}",
+        "output": "str",
+        "x": 440,
+        "y": 400,
+        "wires": [
+            [
+                "782fabbe44d09ade"
+            ]
+        ]
+    },
+    {
+        "id": "782fabbe44d09ade",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "2db7f4d2e0874eba",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/renderLabLists.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 440,
+        "wires": [
+            [
+                "9e060f37a12ecdc5"
+            ]
+        ]
+    },
+    {
+        "id": "f515c16424775e9c",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "9e060f37a12ecdc5",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// リスト描画\nfunction renderLabLists(data) {\n    // 研究室一覧コンテナ取得\n    const container = document.getElementById(\"lab-list\");\n    container.innerHTML = '';\n\n    // データ注入\n    data.forEach(lab => {\n        const item = document.createElement(\"a\");\n        item.href = \"#\"; // クリックしても遷移しない\n        item.className = \"list-group-item list-group-item-action lab-list-item\";\n        item.innerHTML = `\n                    <div class=\"d-flex w-100 justify-content-between align-items-center\">\n                        <h6 class=\"mb-1 text-dark font-weight-bold\">${lab.zemiName}</h6>\n                        <span class=\"badge badge-primary badge-score\">${lab.metrics.合計}</span>\n                    </div>\n                    <div class=\"mb-1\">\n                        <span class=\"badge badge-light border\">#${lab.tag}</span>\n                    </div>\n                    <small class=\"text-muted\">就活: ${lab.metrics.就活支援度} / 雰囲気: ${lab.metrics.雰囲気}</small>\n                `;\n        container.appendChild(item);\n    });\n}",
+        "output": "str",
+        "x": 440,
+        "y": 440,
+        "wires": [
+            [
+                "f515c16424775e9c"
+            ]
+        ]
+    },
+    {
+        "id": "03c4356410907ebd",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// BotPressの初期化\nwindow.botpressWebChat.init({ host: \"http://localhost:3000\", botId: \"teleslabbot\" });\n",
+        "output": "str",
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "269b1bd0f4babefc"
+            ]
+        ]
+    },
+    {
+        "id": "f6477e564da1eb9a",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/processBotpress.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 160,
+        "wires": [
+            [
+                "03c4356410907ebd"
+            ]
+        ]
+    },
+    {
+        "id": "269b1bd0f4babefc",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 670,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "4df7852768ac356b",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/tts.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "a40bf7a481e6bb13"
+            ]
+        ]
+    },
+    {
+        "id": "a40bf7a481e6bb13",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "const syncplay = (audio) =>\n    new Promise((res, rej) => {\n        audio.onended = () => res();\n        audio.onerror = (e) => rej(e);\n\n        // play() が即 resolve/reject することがあるので、ハンドラを先に付ける\n        const p = audio.play();\n        if (p && typeof p.catch === \"function\") p.catch(rej);\n    });\n\nconst playAudio = async (text) => {\n    const url =\n        \"https://kdix-media-project-sfkbku37lq-an.a.run.app/tts/convert?gender=1&input_type=1&text=\" +\n        encodeURIComponent(String(text).replace(/<br>/g, \"\\n\"));\n\n    const res = await fetch(url, { cache: \"force-cache\" });\n    if (!res.ok) throw new Error(`TTS fetch failed: ${res.status}`);\n\n    const blob = await res.blob();\n    const blobUrl = URL.createObjectURL(blob);\n\n    try {\n        await syncplay(new Audio(blobUrl));\n    } finally {\n        URL.revokeObjectURL(blobUrl);\n    }\n};\n\nclass QueueProcessor {\n    constructor() {\n        this.queue = [];\n        this.isProcessing = false;\n    }\n    enqueue(item) {\n        this.queue.push(item);\n        if (!this.isProcessing) this.processQueue();\n    }\n    async processQueue() {\n        this.isProcessing = true;\n        while (this.queue.length > 0) {\n            const t = this.queue.shift();\n            try {\n                await playAudio(t);\n            } catch (e) {\n                // 失敗してもキュー全体が止まらんように\n                console.warn(\"TTS error:\", e);\n            }\n        }\n        this.isProcessing = false;\n    }\n}\n\nconst processor = new QueueProcessor();\n\n// 連続重複・空文を軽く弾く（Botpressのイベント多重対策）\nlet lastText = \"\";\nlet lastAt = 0;\n\n$(window).on(\"message\", (event) => {\n    const d = event.originalEvent ? event.originalEvent.data : event.data;\n    const text = d?.payload?.text;\n\n    if (!text) return;\n    const t = String(text).trim();\n    if (!t) return;\n\n    const now = Date.now();\n    if (t === lastText && now - lastAt < 500) return;\n    lastText = t;\n    lastAt = now;\n\n    processor.enqueue(t);\n});\n",
+        "output": "str",
+        "x": 440,
+        "y": 240,
+        "wires": [
+            [
+                "98adc3c0d3157f0f"
+            ]
+        ]
+    },
+    {
+        "id": "98adc3c0d3157f0f",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "e5893b9a8823afc2",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/handleButton.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 680,
+        "wires": [
+            [
+                "7c87d6b192376963"
+            ]
+        ]
+    },
+    {
+        "id": "fbc09426e0869ddd",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "7c87d6b192376963",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "function handleFilterButton() {\n    const buttonConfigs = [\n        {\n            label: \"車\",\n            tag: \"車\",\n            sortKey: \"\",\n            labName: \"\"\n        },\n        {\n            label: \"就活支援度順\",\n            tag: \"\",\n            sortKey: \"就活支援度\",\n            labName: \"\"\n        },\n        {\n            label: \"アメリカゼミ\",\n            tag: \"\",\n            sortKey: \"\",\n            labName: \"アメリカゼミ\"\n        }\n    ];\n\n    const container = document.getElementById(\"filterButtons\");\n\n    buttonConfigs.forEach(({ label, tag, sortKey, labName }) => {\n        const btn = document.createElement(\"button\");\n\n        btn.className = \"btn btn-outline-secondary btn-sm\";\n        btn.textContent = label;\n\n        btn.addEventListener(\"click\", () => {\n            updateView(tag, sortKey, labName);\n        });\n\n        container.appendChild(btn);\n    });\n}\nfunction handleBackToListButton() {\n    const container = document.getElementById(\"backToList\");\n    const btn = document.createElement(\"button\");\n\n    btn.className = \"btn btn-outline-secondary btn-sm\";\n    btn.textContent = \"研究室一覧に戻る\";\n\n    btn.addEventListener(\"click\", () => {\n        updateView(\"\", \"合計\", \"\");\n    });\n\n    container.appendChild(btn);\n}\nfunction handleRenewButton() {\n    const btn = document.getElementById(\"renewButton\");\n    btn.addEventListener(\"click\", ()=> {\n        updateView(\"\", \"合計\", \"\");\n    });\n}\nhandleFilterButton();\nhandleBackToListButton();",
+        "output": "str",
+        "x": 440,
+        "y": 680,
+        "wires": [
+            [
+                "fbc09426e0869ddd"
+            ]
+        ]
+    },
+    {
+        "id": "8ef35d24518b4b6a",
+        "type": "http request",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://webdis:7379/HDEL/latest/data",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 350,
+        "y": 40,
+        "wires": [
+            [
+                "3026d0966a356efb"
+            ]
+        ]
+    },
+    {
+        "id": "ad3e5591b32dd5cc",
+        "type": "http response",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "text/javascript"
+        },
+        "x": 650,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a23b8baadfe08394",
+        "type": "template",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// 音声認識（無音検知付きの堅牢なバージョンを採用）\nvar onConversation = false;\nvar mediaRecorder = null;\nvar audioContext = null;\nvar chunks = [];\nvar terminate = false;\nvar restart_mediarecorder = false;\nvar do_not_repeat_detectsound = false;\n\n// ===== UI helpers（追加）=====\nconst setStatus = (msg) => {\n    const el = document.getElementById('stt_status');\n    if (el) el.textContent = msg;\n};\n\nconst setVU = (percent) => {\n    const el = document.getElementById('vu');\n    if (el) el.style.width = `${Math.max(0, Math.min(100, percent))}%`;\n};\n\n// メータ用の平滑化（見た目をなめらかにするだけ。処理は変えない）\nlet vuSmoothed = 0;\nconst smoothVU = (x) => (vuSmoothed = vuSmoothed * 0.8 + x * 0.2);\n\n// 状態：IDLE / LISTENING / RECORDING / SENDING\nsetStatus('IDLE');\nsetVU(0);\n// ============================\n\n$('#stt_btn').click(function (e) {\n    e.preventDefault();\n    if (!onConversation) {\n        $(this).addClass('btn-danger').removeClass('btn-primary').text('停止中...');\n        setStatus('🎧 LISTENING...');\n        startConversation();\n        onConversation = true;\n    } else {\n        $(this).removeClass('btn-danger').addClass('btn-primary').text('音声認識開始');\n        setStatus('IDLE');\n        setVU(0);\n        terminateConversation();\n        onConversation = false;\n    }\n});\n\nconst onMediaRecorderStop = () => {\n    if (terminate) { terminate = false; return; }\n    if (restart_mediarecorder) {\n        chunks = []; restart_mediarecorder = false; mediaRecorder.start(); return;\n    }\n\n    const blob = new Blob(chunks, { 'type': 'audio/webm' });\n    chunks = [];\n\n    // UIを一時的に青に戻す（自動再開しない場合）\n    if (!onConversation) {\n        $('#stt_btn').removeClass('btn-danger').addClass('btn-primary').text('音声認識開始');\n        setStatus('IDLE');\n        setVU(0);\n    }\n\n    setStatus('⏳ SENDING...');\n\n    var fd = new FormData();\n    fd.append('speech', blob, 'recorded.webm');\n    fd.append('engine', \"2\");\n    fd.append('mimetype', \"2\");\n\n    $.ajax({\n        url: 'https://kdix-media-project-sfkbku37lq-an.a.run.app/stt',\n        type: \"POST\", data: fd, processData: false, contentType: false, dataType: 'json'\n    }).done((response) => {\n        if (response.text) {\n            console.log(\"Detected: \" + response.text);\n            setStatus('✅ ' + response.text);\n            window.botpressWebChat.sendPayload({ type: \"text\", text: response.text });\n        } else {\n            setStatus('…聞き取れんかった');\n        }\n    }).fail(() => {\n        setStatus('⚠ STT失敗');\n    }).always(() => {\n        if (onConversation) setStatus('🎧 LISTENING...');\n    });\n};\n\nconst startConversation = () => {\n    navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {\n        mediaRecorder = new MediaRecorder(stream);\n        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);\n        mediaRecorder.onstop = onMediaRecorderStop;\n        mediaRecorder.start();\n\n        audioContext = new AudioContext();\n        // ★追加：Chrome対策（suspendedのままを防ぐ）\n        audioContext.resume?.();\n\n        const source = audioContext.createMediaStreamSource(stream);\n        const analyser = audioContext.createAnalyser();\n        analyser.minDecibels = -45;\n        analyser.fftSize = 2048; // ★追加：time-domainメータ用に明示\n        source.connect(analyser);\n\n        // 無音判定用（元のまま）\n        const data = new Uint8Array(analyser.frequencyBinCount);\n        // ★追加：メータ用（time-domain）\n        const td = new Uint8Array(analyser.fftSize);\n\n        let silenceSumThreshold = 100;\n        let waitInterval = 100;\n        var soundDetected = false;\n        var silenceCount = 0;\n\n        const detectSound = () => {\n            // 無音判定（元のまま）\n            analyser.getByteFrequencyData(data);\n            var decsum = data.reduce((a, b) => a + b, 0);\n\n            // ===== 音量メータ（表示だけ：確実に動くRMS方式）=====\n            analyser.getByteTimeDomainData(td);\n            let sum = 0;\n            for (let i = 0; i < td.length; i++) {\n                const v = (td[i] - 128) / 128;\n                sum += v * v;\n            }\n            const rms = Math.sqrt(sum / td.length); // 0〜1くらい\n            const vu = smoothVU(Math.min(100, Math.round((rms / 0.12) * 100))); // 0.12は目安\n            setVU(vu);\n            // ===================================================\n\n            if (decsum <= silenceSumThreshold) {\n                silenceCount++;\n            } else {\n                if (!soundDetected) setStatus('🟥 RECORDING...');\n                soundDetected = true;\n                silenceCount = 0;\n            }\n\n            if (soundDetected && silenceCount > waitInterval) {\n                mediaRecorder.stop();\n                soundDetected = false;\n                silenceCount = 0;\n\n                setStatus('🎧 LISTENING...');\n                mediaRecorder.start();\n            } else if (silenceCount > waitInterval) {\n                silenceCount = 0;\n                restart_mediarecorder = true;\n                mediaRecorder.stop();\n            }\n\n            if (!do_not_repeat_detectsound) window.requestAnimationFrame(detectSound);\n            else do_not_repeat_detectsound = false;\n        };\n\n        window.requestAnimationFrame(detectSound);\n    });\n}\n\nconst terminateConversation = () => {\n    terminate = true;\n    do_not_repeat_detectsound = true;\n    if (audioContext) audioContext.close();\n    if (mediaRecorder) mediaRecorder.stop();\n}\n",
+        "output": "str",
+        "x": 440,
+        "y": 280,
+        "wires": [
+            [
+                "ad3e5591b32dd5cc"
+            ]
+        ]
+    },
+    {
+        "id": "7d0a421ce336ccad",
+        "type": "http in",
+        "z": "1eba73b568e45a46",
+        "name": "",
+        "url": "/js/stt.js",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "a23b8baadfe08394"
+            ]
+        ]
+    }
+]

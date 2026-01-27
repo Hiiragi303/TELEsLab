@@ -1,0 +1,149 @@
+{
+  "name": "by_tag",
+  "utterances": {
+    "ja": [
+      "[車](car)について知りたい",
+      "[車](car)の研究をしているところ",
+      "[自動車](car)に関連する研究をしているところ",
+      "[医療関係](medical)について知りたい",
+      "[医療](medical)について知りたい",
+      "[天気](weather)に関連する研究をしているところ",
+      "[ゲーム](game)関連が良い",
+      "[AI](ai)について研究できるところ",
+      "[セキュリティ](security)系で",
+      "[インフラ](infrastructure)系の研究があるところごがいい",
+      "[デザイン](design)系の研究があるところ",
+      "[設計](planning)を学べる研究室がいい",
+      "[ロボット](iot)について研究している研究室が知りたい",
+      "[IoT](iot)に関係する研究をしているところ",
+      "[スマホアプリ](app)に近い研究をしている研究室",
+      "[Webサービス](app)系の研究ができるところ",
+      "[データ分析](data)をやっている研究室がいい",
+      "[ビッグデータ](data)を扱っている研究室について知りたい",
+      "人の行動を[分析](data)する研究をしているところ",
+      "[人間とコンピュータの関係](data)を研究している研究室",
+      "[ユーザー体験](design)を重視している研究室がいい",
+      "[UI](design)や[UX](planning)に関係する研究をしているところ",
+      "[画像処理](ai)を研究している研究室について知りたい",
+      "[音声認識](ai)や[音声処理](ai)をやっている研究室",
+      "[自然言語処理](ai)を扱っている研究室がいい",
+      "[機械学習](ai)を使った研究をしているところ",
+      "[ネットワーク](infrastructure)に関係する研究をしている研究室",
+      "[分散システム](infrastructure)を研究しているところ",
+      "[クラウド](infrastructure)や[サーバー](infrastructure)系の研究ができる研究室",
+      "[ソフトウェア工学](design)を学べる研究室がいい",
+      "[情報システム](design)の設計に関係する研究室",
+      "[社会課題](iot)をITで解決する研究をしているところ",
+      "[自動車](car)について研究しているところ",
+      "[自動車関連](car)について学びたい",
+      "[セキュリティ](security)に関心がある",
+      "[セキュリティー](security)に関心がある",
+      "[セキュリティ](security)が良い",
+      "[自動車](car)",
+      "[セキュリティ](security)",
+      "[IoT](iot)",
+      "[人工知能](ai)"
+    ]
+  },
+  "slots": [
+    {
+      "id": "zhH3eUoD6dqWHniS-x8p2",
+      "name": "car",
+      "entities": [
+        "any"
+      ],
+      "color": 1
+    },
+    {
+      "id": "E5_cbA8Mmpz_gLmfWT5vY",
+      "name": "iot",
+      "entities": [
+        "any"
+      ],
+      "color": 2
+    },
+    {
+      "id": "qSa3x-RzJ-cHzMVjrdBUu",
+      "name": "medical",
+      "entities": [
+        "any"
+      ],
+      "color": 3
+    },
+    {
+      "id": "-kfIYlhWVWa7BbzyfRi-Y",
+      "name": "weather",
+      "entities": [
+        "any"
+      ],
+      "color": 4
+    },
+    {
+      "id": "ugfoAvgBs47xRgeFH1_h1",
+      "name": "game",
+      "entities": [
+        "any"
+      ],
+      "color": 5
+    },
+    {
+      "id": "WXrOoXp3Lf5eLZer89_hm",
+      "name": "ai",
+      "entities": [
+        "any"
+      ],
+      "color": 6
+    },
+    {
+      "id": "kSXDQByLjBE8W1k3Lp-Hx",
+      "name": "security",
+      "entities": [
+        "any"
+      ],
+      "color": 7
+    },
+    {
+      "id": "Xg8xzhXYhgQluKM1FWtPO",
+      "name": "infrastructure",
+      "entities": [
+        "any"
+      ],
+      "color": 8
+    },
+    {
+      "id": "OdMaWnOp1JbN7E5TnLClm",
+      "name": "design",
+      "entities": [
+        "any"
+      ],
+      "color": 9
+    },
+    {
+      "id": "EAKMGUT-DXxzyK5AMGU5c",
+      "name": "planning",
+      "entities": [
+        "any"
+      ],
+      "color": 10
+    },
+    {
+      "id": "vxdHCbQV-GK7deubFjJeD",
+      "name": "app",
+      "entities": [
+        "any"
+      ],
+      "color": 11
+    },
+    {
+      "id": "qfL92zVpik9rDChHcer6P",
+      "name": "data",
+      "entities": [
+        "any"
+      ],
+      "color": 12
+    }
+  ],
+  "contexts": [
+    "global"
+  ]
+}

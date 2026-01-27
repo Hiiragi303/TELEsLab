@@ -1,0 +1,121 @@
+{
+  "name": "by_lab",
+  "utterances": {
+    "ja": [
+      "[アメリカゼミ](semi_a)について知りたい",
+      "[アメリカ](semi_a)について知りたい",
+      "[アメリカ](semi_a)",
+      "[バチカンゼミ](semi_b)について知りたい",
+      "[バチカン](semi_b)について知りたい",
+      "[バチカン](semi_b)",
+      "[チャイナゼミ](semi_c)について知りたい",
+      "[チャイナ](semi_c)について知りたい",
+      "[チャイナ](semi_c)",
+      "[ドイツゼミ](semi_d)について知りたい",
+      "[ドイツ](semi_d)について知りたい",
+      "[ドイツ](semi_d)",
+      "[エクアドルゼミ](semi_e)について知りたい",
+      "[エクアドル](semi_e)について知りたい",
+      "[エクアドル](semi_e)",
+      "[フランスゼミ](semi_f)について知りたい",
+      "[フランス](semi_f)について知りたい",
+      "[フランス](semi_f)",
+      "[グアムゼミ](semi_g)について知りたい",
+      "[グアム](semi_g)について知りたい",
+      "[グアム](semi_g)",
+      "[日本ゼミ](semi_h)について知りたい",
+      "[日本](semi_h)について知りたい",
+      "[日本](semi_h)",
+      "[ニホンゼミ](semi_h)について知りたい",
+      "[ニホン](semi_h)について知りたい",
+      "[ニホン](semi_h)",
+      "[アメリカ研究室](semi_a)",
+      "[アメリカ研](semi_a)",
+      "[バチカン研究室](semi_b)",
+      "[バチカン研](semi_b)",
+      "[チャイナ研究室](semi_c)",
+      "[チャイナ研](semi_c)",
+      "[ドイツ研究室](semi_d)",
+      "[ドイツ研](semi_d)",
+      "[エクアドル研究室](semi_e)",
+      "[エクアドル研](semi_e)",
+      "[フランス研究室](semi_f)",
+      "[フランス研](semi_f)",
+      "[グアム研究室](semi_g)",
+      "[グアム研](semi_g)",
+      "[ニホン研究室](semi_h)",
+      "[ニホン研](semi_h)",
+      "[日本研究室](semi_h)",
+      "[ニホン研](semi_h)"
+    ]
+  },
+  "slots": [
+    {
+      "id": "41frfL8zZ2f0mYcjqNP5A",
+      "name": "semi_a",
+      "entities": [
+        "any"
+      ],
+      "color": 1
+    },
+    {
+      "id": "kb_JicoXXL6a8LO5lnicG",
+      "name": "semi_b",
+      "entities": [
+        "any"
+      ],
+      "color": 2
+    },
+    {
+      "id": "Aq8rEQ32iGEEHwcDDsUlY",
+      "name": "semi_c",
+      "entities": [
+        "any"
+      ],
+      "color": 3
+    },
+    {
+      "id": "Ex_WroWksU_jU4hE_SrAY",
+      "name": "semi_d",
+      "entities": [
+        "any"
+      ],
+      "color": 4
+    },
+    {
+      "id": "x5YmCL7b6OzpmNO6-In1A",
+      "name": "semi_e",
+      "entities": [
+        "any"
+      ],
+      "color": 5
+    },
+    {
+      "id": "PFIzUA9RGStshD_saCKZ9",
+      "name": "semi_f",
+      "entities": [
+        "any"
+      ],
+      "color": 6
+    },
+    {
+      "id": "8-lQvZZQ_onUULgEbgsxm",
+      "name": "semi_g",
+      "entities": [
+        "any"
+      ],
+      "color": 7
+    },
+    {
+      "id": "3MfGw34ZsoqFgHdKlZKpS",
+      "name": "semi_h",
+      "entities": [
+        "any"
+      ],
+      "color": 8
+    }
+  ],
+  "contexts": [
+    "global"
+  ]
+}
